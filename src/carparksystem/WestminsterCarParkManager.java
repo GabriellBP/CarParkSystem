@@ -1,14 +1,25 @@
+package carparksystem;
+
 import java.util.ArrayList;
 import java.util.Scanner;
+import vehicles.CarPrototype;
+import vehicles.MotorBikePrototype;
+import vehicles.VanPrototype;
+import vehicles.VehiclePrototype;
 
 public class WestminsterCarParkManager implements CarParkManager {
-	private Vehicle[] vehicleParkingSlots = new Vehicle[20];//parking space array to store vehicle objects
+	private VehiclePrototype[] vehicleParkingSlots = new VehiclePrototype[20];//parking space array to store vehicle objects
 	static Scanner input = new Scanner(System.in);
-	private Vehicle lastEntry = null;//to find the last entry of the vehicle which was entered
-
-	private ArrayList<Integer> vehicleOrderList = new ArrayList<Integer>();//is used to have the index of the vehicles 
+	private VehiclePrototype lastEntry = null;//to find the last entry of the vehicle which was entered
+        DateTime entry = new DateTime(0, 0, 0, 0, 0);
+        //PrototypeAplication
+        private CarPrototype car = new CarPrototype(entry);
+        private MotorBikePrototype motorBike = new MotorBikePrototype(entry);
+        private VanPrototype van = new VanPrototype(entry);
+	
+        private ArrayList<Integer> vehicleOrderList = new ArrayList<Integer>();//is used to have the index of the vehicles 
 	//which are currently parked in the last in First out approach
-	private ArrayList<Vehicle> deletedTempVehicleList = new ArrayList<Vehicle>();//stores the vehicle object which had left the parking space
+	private ArrayList<VehiclePrototype> deletedTempVehicleList = new ArrayList<VehiclePrototype>();//stores the vehicle object which had left the parking space
 
 	public static void main(String[] args) {
 		System.out.println(" ---------------------------------------------");
@@ -129,9 +140,17 @@ public class WestminsterCarParkManager implements CarParkManager {
 				input.next();// validating user input based on string value
 			}
 			int noOfDoors = input.nextInt();
+                        input.nextLine();
 			System.out.print("Enter car color: ");
 			String color = input.next();
-			vehicleParkingSlots[checkFreeSpace] = new Car(id, brand, entryTime, noOfDoors, color);
+                        //PrototypeAplication
+                        CarPrototype carr = (CarPrototype) car.clonar();
+                        carr.setBrandName(brand);
+                        carr.setEntryTime(entryTime);
+                        carr.setPlateID(id);
+                        carr.setNoOfDoors(noOfDoors);
+                        carr.setCarColor(color);
+			vehicleParkingSlots[checkFreeSpace] = carr;
 			break;
 		case "van":
 			System.out.print("Enter cargo volume: ");
@@ -140,8 +159,15 @@ public class WestminsterCarParkManager implements CarParkManager {
 				input.next();// validating user input based on string value
 			}
 			double volume = input.nextDouble();
-			vehicleParkingSlots[checkFreeSpace] = new Van(id, brand, entryTime, volume);
-			vehicleParkingSlots[checkFreeSpace + 1] = new Van(id, brand, entryTime, volume);
+                        //Prototype
+                        VanPrototype vann = (VanPrototype) van.clonar();
+                        vann.setPlateID(id);
+                        vann.setCargoVolume(volume);
+                        vann.setEntryTime(entryTime);
+                        vann.setBrandName(brand);
+                        
+                        vehicleParkingSlots[checkFreeSpace] = vann;
+                        vehicleParkingSlots[checkFreeSpace + 1] = vann;
 			break;
 		case "bike":
 			System.out.print("Enter engine size: ");
@@ -150,7 +176,14 @@ public class WestminsterCarParkManager implements CarParkManager {
 				input.next();// validating user input based on string value
 			}
 			int size = input.nextInt();
-			vehicleParkingSlots[checkFreeSpace] = new MotorBike(id, brand, entryTime, size);
+                        //Prototype
+                        MotorBikePrototype motorrBike = (MotorBikePrototype) motorBike.clonar();
+                        motorrBike.setPlateID(id);
+                        motorrBike.setEntryTime(entryTime);
+                        motorrBike.setBrandName(brand);
+                        motorrBike.setEngineSize(size);
+                        
+                        vehicleParkingSlots[checkFreeSpace] = motorrBike;
 			break;
 		}
 		lastEntry = vehicleParkingSlots[checkFreeSpace];
@@ -248,15 +281,15 @@ public class WestminsterCarParkManager implements CarParkManager {
 				vehicleType = vehicleParkingSlots[i].getClass().getSimpleName();
 				++total;
 				switch (vehicleType) { // to increment each vehicle type counter
-				case "Car":
+				case "CarPrototype":
 					++car;
 					break;
-				case "Van":
+				case "VanPrototype":
 					++van;
 					++i; // to skip the next slot as well since a van occupied 2
 							// slots
 					break;
-				case "Motorbike":
+				case "MotorBikePrototype":
 					++bike;
 					break;
 				}
@@ -278,7 +311,7 @@ public class WestminsterCarParkManager implements CarParkManager {
 		System.out.println("------------------------------------");
 		System.out.println("         CAR : " + carPercentage + "%");
 		System.out.println("         VAN : " + vanPercentage + "%");
-		System.out.println("         BIKE:" + bikePercentage + "%");
+		System.out.println("         BIKE: " + bikePercentage + "%");
 		System.out.println("");
 	}
 
@@ -296,7 +329,7 @@ public class WestminsterCarParkManager implements CarParkManager {
 
 		// to find the last vehicle that entered the parking slot.
 		if (lastEntry != null) {
-			System.out.println("Last vehicle which was parked");
+			System.out.println("\nLast vehicle which was parked");
 			System.out.println("------------------------------");
 			System.out.println("ID : " + lastEntry.getPlateID());
 			System.out.println("Type : " + lastEntry.getClass().getSimpleName());

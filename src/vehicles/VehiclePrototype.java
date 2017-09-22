@@ -1,20 +1,25 @@
+package vehicles;
 
-abstract public class Vehicle {
+import carparksystem.DateTime;
+
+abstract public class VehiclePrototype {
 	protected String plateID;
 	protected String brandName;
 	protected DateTime entryTime;
 
 	// constructor
-	Vehicle(String id, String brand, DateTime entryTime) {
+	VehiclePrototype(String id, String brand, DateTime entryTime) {
 		this.plateID = id;
 		this.brandName = brand;
 		this.entryTime = entryTime;
 	}
+        //prototype
+        public abstract VehiclePrototype clonar();
 
 	public String getPlateID() {
 		return plateID;
 	}
-
+        
 	// setter for vehicle idPlate
 	public void setPlateID(String id) {
 		this.plateID = id;
@@ -41,4 +46,6 @@ abstract public class Vehicle {
 	public DateTime getEntryTimeObject() {
 		return entryTime;
 	}
+
+
 }
