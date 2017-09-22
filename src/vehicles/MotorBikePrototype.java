@@ -40,6 +40,14 @@ public class MotorBikePrototype extends VehiclePrototype {
 		return bikeEngineSize;
 	}
 
-    
+    @Override
+    public int vehicleSize() {
+        return 1; //size of motorbike is one
+    }
+
+    @Override
+    public String toString() {
+        return "MotorBike"; //To change body of generated methods, choose Tools | Templates.
+    }
 
 }

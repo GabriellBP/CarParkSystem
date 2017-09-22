@@ -15,7 +15,11 @@ abstract public class VehiclePrototype {
 	}
         //prototype
         public abstract VehiclePrototype clonar();
-
+        
+        //strategy
+        public abstract int vehicleSize();
+        
+        //getters and setters
 	public String getPlateID() {
 		return plateID;
 	}

@@ -37,6 +37,14 @@ public class VanPrototype extends VehiclePrototype{
         return cargoVolume;
     }
 
-    
+    @Override
+    public int vehicleSize() {
+        return 2; //size of van is two (in this case)
+    }
+
+    @Override
+    public String toString() {
+        return "Van"; //To change body of generated methods, choose Tools | Templates.
+    }
 
 }

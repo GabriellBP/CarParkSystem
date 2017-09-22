@@ -90,7 +90,8 @@ public class WestminsterCarParkManager implements CarParkManager {
 		}
 	}
 
-	// Override
+	
+        @Override
 	public void addVehicle() {
 		boolean typeVal = false;
 		String vehicleType = ""; // String variable to hold the vehicle type
@@ -105,8 +106,23 @@ public class WestminsterCarParkManager implements CarParkManager {
 				System.out.println("");
 			}
 		}
-
-		int checkFreeSpace = checkForFreeSlot(vehicleType);
+                VehiclePrototype vehicle;//pensar em colocar isso no lugar do carr, vann ....
+                switch (vehicleType) {
+		case "car":
+                        //PrototypeAplication
+                        vehicle = (CarPrototype) car.clonar();
+			break;
+		case "van":
+                        //Prototype
+                        vehicle = (VanPrototype) van.clonar();
+			break;
+		default:
+                        //Prototype
+                        vehicle = (MotorBikePrototype) motorBike.clonar();
+			break;
+		}
+                
+		int checkFreeSpace = checkForFreeSlot(vehicle);
 		if (checkFreeSpace == -1) {
 			System.out.println("**Parking Slot Full, No free slot available!**");
 			return;
@@ -150,7 +166,8 @@ public class WestminsterCarParkManager implements CarParkManager {
                         carr.setPlateID(id);
                         carr.setNoOfDoors(noOfDoors);
                         carr.setCarColor(color);
-			vehicleParkingSlots[checkFreeSpace] = carr;
+			for(int k = 0; k<carr.vehicleSize(); k++)
+                            vehicleParkingSlots[checkFreeSpace + k] = carr;
 			break;
 		case "van":
 			System.out.print("Enter cargo volume: ");
@@ -166,8 +183,8 @@ public class WestminsterCarParkManager implements CarParkManager {
                         vann.setEntryTime(entryTime);
                         vann.setBrandName(brand);
                         
-                        vehicleParkingSlots[checkFreeSpace] = vann;
-                        vehicleParkingSlots[checkFreeSpace + 1] = vann;
+                        for(int k = 0; k<vann.vehicleSize(); k++)
+                            vehicleParkingSlots[checkFreeSpace + k] = vann;
 			break;
 		case "bike":
 			System.out.print("Enter engine size: ");
@@ -183,7 +200,8 @@ public class WestminsterCarParkManager implements CarParkManager {
                         motorrBike.setBrandName(brand);
                         motorrBike.setEngineSize(size);
                         
-                        vehicleParkingSlots[checkFreeSpace] = motorrBike;
+                        for(int k = 0; k<motorrBike.vehicleSize(); k++)
+                            vehicleParkingSlots[checkFreeSpace + k] = motorrBike;
 			break;
 		}
 		lastEntry = vehicleParkingSlots[checkFreeSpace];
@@ -192,20 +210,15 @@ public class WestminsterCarParkManager implements CarParkManager {
 		System.out.println("No of free slots remaining is " + totalOfSlots());
 	}
 
-	public int checkForFreeSlot(String VehicleType) {
+	public int checkForFreeSlot(VehiclePrototype vehicle) {
 		for (int i = 0; i < 20; i++) { // iterating through each slot to find a
 										// free spot
-			if (vehicleParkingSlots[i] == null) {
-				if (VehicleType.equalsIgnoreCase("van")) { // if its a van need
-															// to check whether
-															// adjacent slot is
-															// also free
-					if (vehicleParkingSlots[i + 1] == null) {
-						return i;
-					}
-				} else { // since one slot is sufficient for cars and bikes
-					return i;
-				}
+			if (vehicleParkingSlots[i] == null) {            
+                            for(int j = 1; j < vehicle.vehicleSize(); j++)//Strategy											// also free
+                                if (vehicleParkingSlots[i + j] != null) {
+                                        return -1;
+                                }
+                            return i;
 			}
 		}
 		return -1; // if there is no free slots
@@ -221,7 +234,8 @@ public class WestminsterCarParkManager implements CarParkManager {
 		return number;
 	}
 
-	// Override
+	
+        @Override
 	public void deleteVehicle() {
 		boolean foundFlag = false;
 		int i;
@@ -252,16 +266,14 @@ public class WestminsterCarParkManager implements CarParkManager {
 			return;
 		}
 		// to display the vehicle leaving
-		String VehicleType = vehicleParkingSlots[i].getClass().getSimpleName();
+		String VehicleType = vehicleParkingSlots[i].toString();
 		System.out.println("A " + VehicleType + " left the parking space.");
 		deletedTempVehicleList.add(vehicleParkingSlots[i]);
-		if (VehicleType.equalsIgnoreCase("van")) {
-			// to physically remove the element from the vehicle array
-			vehicleParkingSlots[i] = null;
-			vehicleParkingSlots[i + 1] = null;
-		} else {
-			vehicleParkingSlots[i] = null;
-		}
+		
+                // to physically remove the element from the vehicle array
+                int vehicleSize = vehicleParkingSlots[i].vehicleSize();
+                for(int k = 0; k<vehicleSize; k++)
+                    vehicleParkingSlots[i + k] = null;
 		vehicleOrderList.remove(i);
 
 	}
@@ -321,7 +333,7 @@ public class WestminsterCarParkManager implements CarParkManager {
 			System.out.println("First vehicle Which was parked");
 			System.out.println("-------------------------------");
 			System.out.println("ID : " + vehicleParkingSlots[vehicleOrderList.get(0)].getPlateID());
-			System.out.println("Type : " + vehicleParkingSlots[vehicleOrderList.get(0)].getClass().getSimpleName());
+			System.out.println("Type : " + vehicleParkingSlots[vehicleOrderList.get(0)].toString());
 			System.out.println("Entry time : " + vehicleParkingSlots[vehicleOrderList.get(0)].getEntryTime());
 		} else {
 			System.out.println("No vehicle in the parking currently");
@@ -332,7 +344,7 @@ public class WestminsterCarParkManager implements CarParkManager {
 			System.out.println("\nLast vehicle which was parked");
 			System.out.println("------------------------------");
 			System.out.println("ID : " + lastEntry.getPlateID());
-			System.out.println("Type : " + lastEntry.getClass().getSimpleName());
+			System.out.println("Type : " + lastEntry.toString());
 			System.out.println("Entry time : " + lastEntry.getEntryTime());
 		} else {
 			System.out.println("**The Parking space is Empty no vehicles are parked currently**");
@@ -350,7 +362,7 @@ public class WestminsterCarParkManager implements CarParkManager {
 			System.out.println("Slot " + (index + 1) + " is Occupied.");
 			System.out.println("ID plate: " + vehicleParkingSlots[index].getPlateID());
 			System.out.println("Entry time: " + vehicleParkingSlots[index].getEntryTime());
-			System.out.println("Type: " + vehicleParkingSlots[index].getClass().getSimpleName());
+			System.out.println("Type: " + vehicleParkingSlots[index].toString());
 			System.out.println("");
 		}
 
@@ -385,7 +397,7 @@ public class WestminsterCarParkManager implements CarParkManager {
 				int objectYear = vehicleParkingSlots[i].getEntryTimeObject().getYear();
 				if ((objectDate == date) && (objectMonth == month) && (objectYear == year)) {
 					count++;
-					String type = vehicleParkingSlots[i].getClass().getSimpleName();
+					String type = vehicleParkingSlots[i].toString();
 					String id = vehicleParkingSlots[i].getPlateID();
 					System.out.println(count + " : " + type + " Plate ID No : " + id);
 					if (type.equalsIgnoreCase("van")) {
@@ -401,7 +413,7 @@ public class WestminsterCarParkManager implements CarParkManager {
 			int objYear = deletedTempVehicleList.get(y).getEntryTimeObject().getYear();
 			if ((objDate == date) && (objMonth == month) && (objYear == year)) {
 				count++;
-				String type = deletedTempVehicleList.get(y).getClass().getSimpleName();
+				String type = deletedTempVehicleList.get(y).toString();
 				String id = deletedTempVehicleList.get(y).getPlateID();
 				System.out.println(count + " : " + type + " ID No : " + id);
 				if (type.equalsIgnoreCase("van")) {
@@ -478,7 +490,7 @@ public class WestminsterCarParkManager implements CarParkManager {
 					}
 				}
 				System.out.println("Vehicle ID : " + vehicleParkingSlots[i].getPlateID() + "   Charge: " + charge);
-				String type = vehicleParkingSlots[i].getClass().getSimpleName();
+				String type = vehicleParkingSlots[i].toString();
 				if (type.equalsIgnoreCase("Van")) {
 					++i;
 				}

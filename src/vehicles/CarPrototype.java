@@ -43,4 +43,16 @@ public class CarPrototype extends VehiclePrototype{
     public void setCarColor(String carColor) {
             this.carColor = carColor;
     }
+
+    @Override
+    public int vehicleSize() {
+        return 1;//size of car is one
+    }
+
+    @Override
+    public String toString() {
+        return "Car"; //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 }
