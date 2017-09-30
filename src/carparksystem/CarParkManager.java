@@ -14,4 +14,6 @@ interface CarParkManager {
 	public abstract void displayPerDayList();
 
 	public abstract void displayParkingCharges();
+
+        public abstract void parkingSlotInicialization();//particular function
 }
