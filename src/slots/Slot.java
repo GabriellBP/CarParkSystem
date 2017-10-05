@@ -28,6 +28,10 @@ public class Slot {
     public SlotState getSlotState() {
         return slotState;
     }
+
+    public void setSlotState(SlotState slotState) {
+        this.slotState = slotState;
+    }
     
     
 }
