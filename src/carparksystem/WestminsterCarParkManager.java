@@ -130,7 +130,6 @@ public class WestminsterCarParkManager implements CarParkManager {
                         vehicle = (MotorBikePrototype) motorBike.clonar();
 			break;
 		}
-                System.out.println(vehicle.toString());
 		int checkFreeSpace = checkForFreeSlot(vehicle);
                 System.out.println(checkFreeSpace);
 		if (checkFreeSpace == -1) {
@@ -222,9 +221,6 @@ public class WestminsterCarParkManager implements CarParkManager {
                         }                        
 			break;
 		}
-                for(int gabriel = 0; gabriel<sizeParking; gabriel++){
-                    System.out.println(vehicleParkingSlots[gabriel].getSlotState().toString());
-                }
 		lastEntry = vehicleParkingSlots[checkFreeSpace].getVehicle();
 		System.out.println("");
 		System.out.println("Vehicle parked Sucessfully!");
@@ -310,14 +306,9 @@ public class WestminsterCarParkManager implements CarParkManager {
 	private void printVehiclePercentage() {
 		int car = 0, van = 0, bike = 0, total = 0;
 		String vehicleType;
-                for(int gabriel = 0; gabriel<sizeParking; gabriel++){
-                    System.out.println(gabriel+"OI"+vehicleParkingSlots[gabriel].getSlotState().toString());
-                }
 		for (int i = 0; i < sizeParking; i++) { // loop to find the element index
-                        System.out.println(i+"Ai"+vehicleParkingSlots[i].getSlotState().toString());
 			if (vehicleParkingSlots[i].getSlotState().toString() == "Full Slot") { // if an element is not empty
 				vehicleType = vehicleParkingSlots[i].getVehicle().getClass().getSimpleName();
-                                //System.out.println(vehicleType);
 				++total;
 				switch (vehicleType) { // to increment each vehicle type counter
 				case "CarPrototype":
